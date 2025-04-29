@@ -8,7 +8,7 @@
     body {
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', sans-serif;
       background-color: #3d2c8d;
       color: white;
       display: flex;
@@ -31,19 +31,16 @@
     }
 
     #motivasi {
-      position: relative;
       width: 90%;
       max-width: 600px;
       min-height: 80px;
       margin-top: 2rem;
       padding: 1rem;
       box-sizing: border-box;
-      overflow: hidden;
+      position: relative;
     }
 
     .kata {
-      position: absolute;
-      width: 100%;
       font-size: 1.2rem;
       font-style: italic;
       line-height: 1.6;
@@ -51,17 +48,14 @@
       text-align: center;
       opacity: 0;
       transform: translateX(100%);
-      transition: all 0.5s ease;
+      animation: masuk 0.6s ease forwards;
     }
 
-    .masuk {
-      opacity: 1;
-      transform: translateX(0);
-    }
-
-    .keluar {
-      transform: translateX(-100%);
-      opacity: 0;
+    @keyframes masuk {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
     }
 
     @media screen and (max-width: 500px) {
@@ -81,9 +75,8 @@
     Gagal itu proses. Menyerah itu pilihan. Tapi lo udah sejauh ini, tinggal dikit lagi menuju garis finish! 🔥🔥🔥
   </p>
 
-
   <div id="motivasi">
-    <div class="kata masuk" id="kataAktif"></div>
+    <div class="kata" id="kataAktif">Loading motivasi...</div>
   </div>
 
   <script>
@@ -96,42 +89,30 @@
       "Semua perjuangan lo sekarang bakal jadi cerita keren nanti.",
       "Inget alasan kenapa lo mulai.",
       "Kalau capek, istirahat. Jangan berhenti.",
-      "Datang ke ruang ujian aja udah bentuk keberanian luar biasa.",
-      "Gua bakal datang. Gua bakal bertarung. Gua bakal hajar sebisanya. Habis itu serahin hasilnya ke Allah."
+      "Gua bakal datang. Gua bakal bertarung. Gua bakal hajar sebisanya. Habis itu serahin hasilnya ke Allah.",
+      "Datang ke ruang ujian aja udah bentuk keberanian luar biasa."
     ];
 
-    let currentIndex = 0;
+    let index = 0;
 
     function gantiMotivasi() {
       const container = document.getElementById("motivasi");
       const lama = document.getElementById("kataAktif");
 
-      // Animasi keluar
-      lama.classList.remove("masuk");
-      lama.classList.add("keluar");
+      // Hapus lama setelah delay
+      if (lama) lama.remove();
 
-      // Buat elemen baru
       const baru = document.createElement("div");
       baru.className = "kata";
       baru.id = "kataAktif";
-
-      currentIndex = (currentIndex + 1) % motivasiList.length;
-      baru.textContent = motivasiList[currentIndex];
+      baru.textContent = motivasiList[index];
       container.appendChild(baru);
 
-      // Delay untuk animasi masuk
-      setTimeout(() => baru.classList.add("masuk"), 10);
-
-      // Hapus elemen lama setelah animasi
-      setTimeout(() => {
-        if (lama) lama.remove();
-      }, 500);
+      index = (index + 1) % motivasiList.length;
     }
 
-    // Tampilkan pertama kali
-    document.getElementById("kataAktif").textContent = motivasiList[0];
-
-    // Auto ganti tiap 5 detik
+    // Tampilkan pertama & lanjut otomatis
+    gantiMotivasi();
     setInterval(gantiMotivasi, 5000);
   </script>
 </body>
